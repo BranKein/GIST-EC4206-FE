@@ -1,19 +1,11 @@
-import { combineReducers } from "redux";
 import loadingReducer from "./loading";
-import errorReducer from "./error";
+import { combineReducers } from "redux";
 import { all } from "redux-saga/effects";
-import getArticleListReducer, { getArticleListSaga } from "./getArticleList";
 
-const rootReducer = combineReducers({
-  loadingReducer,
-  errorReducer,
-  getArticleListReducer,
-});
+const rootReducer = combineReducers({ loadingReducer });
 
 export function* rootSaga() {
-  yield all([
-    getArticleListSaga(),
-  ]);
+  yield all([]);
 }
 
 export default rootReducer;

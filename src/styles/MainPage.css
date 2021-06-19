@@ -1,0 +1,43 @@
+@media screen {
+    .main-page-wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        height: 90%;
+        margin: 100px 10%;
+    }
+
+    .bodies-wrapper {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+    }
+
+    .body-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: auto;
+    }
+
+    .setting-header-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .setting-header-title {
+        margin-right: 10px;
+    }
+
+    .experiment-button {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+        height: 30px;
+        margin: 20px 0;
+    }
+}
