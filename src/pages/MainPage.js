@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import "../styles/MainPage.css";
-import * as api from "../lib/api";
-import { call } from "redux-saga/effects";
 import wait from "waait";
 import axios from "axios";
 
 const MainPage = () => {
-  const [n, setN] = useState(10);
+  const domain = '';
+  const [n, setN] = useState(100);
   const [userUUID, setUserUUID] = useState("userUUID");
 
   const ExperimentHeader = async () => {
@@ -18,7 +17,7 @@ const MainPage = () => {
     for (let i = 0; i < n; i++) {
       const userToken = await localStorage.getItem("userToken");
       await axios.get(
-        `/header-based/validate`,
+        `${domain}/header-based/validate`,
         {
           headers: {
             Authorization: `Token ${userToken}`
@@ -42,7 +41,7 @@ const MainPage = () => {
     let endTime = new Date();
     for (let i = 0; i < n; i++) {
       await axios.get(
-        `/cookie-based/validate`
+        `${domain}/cookie-based/validate`
       ).then(function(response) {
         if (response.data.uuid === userUUID) {
           endTime = new Date();
@@ -56,7 +55,7 @@ const MainPage = () => {
 
   const setToken_Header = async () => {
     axios.get(
-      `/header-based/setting`
+      `${domain}/header-based/setting`
     ).then(function(response) {
       setUserUUID(response.data.uuid);
       localStorage.setItem("userToken", response.data.token);
@@ -65,7 +64,7 @@ const MainPage = () => {
 
   const setToken_Cookie = async () => {
     axios.get(
-      `/cookie-based/setting`
+      `${domain}/cookie-based/setting`
     ).then(function(response) {
       setUserUUID(response.data.uuid);
     })
@@ -76,6 +75,14 @@ const MainPage = () => {
       <h2>Header based Authorization<br/>vs<br/>Cookie based Authorization</h2>
       <div>
         <p>userUUID: {userUUID}</p>
+      </div>
+      <div className="setting-header-wrapper">
+        <div className="setting-header-title">
+          N:
+        </div>
+        <input onChange={(e) => {
+          setN(e.target.value);
+        }}/>
       </div>
       <div className="bodies-wrapper">
         <div className="body-wrapper">
