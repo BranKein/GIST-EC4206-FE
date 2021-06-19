@@ -37,11 +37,11 @@ const MainPage = () => {
 
   const ExperimentCookie = async () => {
     let timeInterval = [];
-    console.log("Cookie-based Authorization Start!");
+    await console.log("Cookie-based Authorization Start!");
     let startTime = new Date();
     let endTime = new Date();
     for (let i = 0; i < n; i++) {
-      axios.get(
+      await axios.get(
         `/cookie-based/validate`
       ).then(function(response) {
         if (response.data.uuid === userUUID) {
@@ -51,7 +51,7 @@ const MainPage = () => {
         }
       });
     }
-    console.log(timeInterval);
+    await console.log(timeInterval);
   };
 
   const setToken_Header = async () => {
