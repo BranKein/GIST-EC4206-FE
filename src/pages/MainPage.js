@@ -41,7 +41,10 @@ const MainPage = () => {
     let endTime = new Date();
     for (let i = 0; i < n; i++) {
       await axios.get(
-        `${domain}/cookie-based/validate`
+        `${domain}/cookie-based/validate`,
+        {
+          withCredentials: true
+        }
       ).then(function(response) {
         if (response.data.uuid === userUUID) {
           endTime = new Date();
@@ -64,7 +67,10 @@ const MainPage = () => {
 
   const setToken_Cookie = async () => {
     axios.get(
-      `${domain}/cookie-based/setting`
+      `${domain}/cookie-based/setting`,
+      {
+        withCredentials: true
+      }
     ).then(function(response) {
       setUserUUID(response.data.uuid);
     })
