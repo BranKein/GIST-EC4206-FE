@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import "../styles/MainPage.css";
 import * as api from "../lib/api";
 import { call } from "redux-saga/effects";
-import { setTokenForHeader } from "../lib/api";
+import { getTokenFromLocalStorage, setTokenForHeader, setTokenForHeader_v2, validateTokenByHeader } from "../lib/api";
 import wait from "waait";
+import axios from "axios";
 
 const MainPage = () => {
   const [n, setN] = useState(10);
@@ -11,13 +12,15 @@ const MainPage = () => {
 
   const ExperimentHeader = async () => {
     let timeInterval = [];
-    setTokenForHeader();
+    // await setTokenForHeader();
     console.log("Header-based Authorization Start!");
     await wait(1000);
     let startTime = new Date();
     let endTime = new Date();
     for (let i = 0; i < n; i++) {
-      if (await HeaderValidate()) {
+      const userToken = () => getTokenFromLocalStorage();
+      const result = () => validateTokenByHeader(userToken, userUUID);
+      if (result) {
         endTime = new Date();
         timeInterval.push(endTime - startTime);
         console.log(i + ': ' + (endTime - startTime));
@@ -35,7 +38,8 @@ const MainPage = () => {
     let startTime = new Date();
     let endTime = new Date();
     for (let i = 0; i < n; i++) {
-      if (await CookieValidate()) {
+      const result = () => CookieValidate();
+      if (result) {
         endTime = new Date();
         timeInterval.push(endTime - startTime);
         console.log(i + ': ' + (endTime-startTime));
@@ -56,20 +60,21 @@ const MainPage = () => {
     return call(api.validateTokenByCookie, userUUID);
   };
 
-  const setToken_Header = () => {
-    console.log("Hi!");
-    const response = call(api.setTokenForHeader);
-    if (response.res) {
-      setUserUUID(response.uuid);
-      localStorage.setItem("userToken", response.token);
-    }
+  const setToken_Header = async () => {
+    axios.get(
+      `/header-based/setting`
+    ).then(function(response) {
+      setUserUUID(response.data.uuid);
+      localStorage.setItem("userToken", response.data.token);
+    });
   };
 
-  const setToken_Cookie = () => {
-    const response = call(api.setTokenForCookie);
-    if (response.res) {
-      setUserUUID(response.uuid);
-    }
+  const setToken_Cookie = async () => {
+    axios.get(
+      `/cookie-based/setting`
+    ).then(function(response) {
+      setUserUUID(response.data.uuid);
+    })
   };
 
   return (

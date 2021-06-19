@@ -2,25 +2,6 @@ import axios from "axios";
 
 export const domain = "";
 
-export const setTokenForCookie = () => {
-  const result = {
-    res: false,
-    uuid: ""
-  };
-  axios.get(
-    `${domain}/cookie-based/setting`
-  ).then(function(response){
-    result.res = true;
-    result.uuid = response.data.uuid;
-  })
-    .catch(function(error) {
-      console.log(error);
-      result.res = false;
-    });
-
-  return result
-};
-
 export const validateTokenByCookie = ( uuid ) => {
   let result = false;
   axios.get(
@@ -36,25 +17,13 @@ export const validateTokenByCookie = ( uuid ) => {
   return result
 };
 
-export const setTokenForHeader = () => {
-  const result = {
-    res: false,
-    uuid: "",
-    token: ""
-  };
+export const setTokenForHeader_v2 = () => {
   axios.get(
     `${domain}/header-based/setting`
-  ).then(function(response){
-    result.res = true;
-    result.uuid = response.data.uuid;
-    result.token = response.data.token;
+  ).then(function(response) {
+    return response;
   })
-    .catch(function(error) {
-      console.log(error);
-      result.res = false;
-    });
-  return result
-};
+}
 
 export const validateTokenByHeader = ( userToken, uuid ) => {
   let result = false;
