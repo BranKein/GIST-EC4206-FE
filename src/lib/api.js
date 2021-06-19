@@ -2,26 +2,27 @@ import axios from "axios";
 
 export const domain = "";
 
-export const getExample = ( data, userToken ) => {
+export const setTokenForCookie = () => {
   axios.get(
-    `${domain}/resource`,
-    {
-      data: data
-    },
-    {
-      headers: {
-        Authorization: `Token ${userToken}`,
-      },
-    },
+    `${domain}/cookie-based/setting`
   );
 };
 
-export const postExample = ( data, userToken ) => {
-  axios.post(
-    `${domain}/resource`,
-    {
-      data: data
-    },
+export const validateTokenByCookie = () => {
+  axios.get(
+    `${domain}/cookie-based/validate`
+  );
+};
+
+export const setTokenForHeader = () => {
+  axios.get(
+    `${domain}/header-based/setting`,
+  );
+};
+
+export const validateTokenByHeader = ( userToken ) => {
+  axios.get(
+    `${domain}/header-based/validate`,
     {
       headers: {
         Authorization: `Token ${userToken}`,
