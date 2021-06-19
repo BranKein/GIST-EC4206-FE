@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "../styles/MainPage.css";
 import * as api from "../lib/api";
 import { call } from "redux-saga/effects";
-import { getTokenFromLocalStorage, setTokenForHeader, setTokenForHeader_v2, validateTokenByHeader } from "../lib/api";
 import wait from "waait";
 import axios from "axios";
 
@@ -12,24 +11,28 @@ const MainPage = () => {
 
   const ExperimentHeader = async () => {
     let timeInterval = [];
-    // await setTokenForHeader();
-    console.log("Header-based Authorization Start!");
+    await console.log("Header-based Authorization Start!");
     await wait(1000);
     let startTime = new Date();
     let endTime = new Date();
     for (let i = 0; i < n; i++) {
-      const userToken = () => getTokenFromLocalStorage();
-      const result = () => validateTokenByHeader(userToken, userUUID);
-      if (result) {
-        endTime = new Date();
-        timeInterval.push(endTime - startTime);
-        console.log(i + ': ' + (endTime - startTime));
-        // setTheArray(oldArray => [...oldArray, newElement]); 과 같이 js 안에서 실행 시간을 저장할 수 있었지만 이 실행 자체에도 시간이 걸릴 수 있겠다고 생각함
-      } else {
-        break;
-      }
+      const userToken = await localStorage.getItem("userToken");
+      await axios.get(
+        `/header-based/validate`,
+        {
+          headers: {
+            Authorization: `Token ${userToken}`
+          }
+        }
+      ).then(function(response) {
+        if (response.data.uuid === userUUID) {
+          endTime = new Date();
+          timeInterval.push(endTime - startTime);
+          console.log(i + ': ' + (endTime - startTime));
+        }
+      });
     }
-    console.log(timeInterval);
+    await console.log(timeInterval);
   };
 
   const ExperimentCookie = async () => {
@@ -38,26 +41,17 @@ const MainPage = () => {
     let startTime = new Date();
     let endTime = new Date();
     for (let i = 0; i < n; i++) {
-      const result = () => CookieValidate();
-      if (result) {
-        endTime = new Date();
-        timeInterval.push(endTime - startTime);
-        console.log(i + ': ' + (endTime-startTime));
-        // setTheArray(oldArray => [...oldArray, newElement]); 과 같이 js 안에서 실행 시간을 저장할 수 있었지만 이 실행 자체에도 시간이 걸릴 수 있겠다고 생각함
-      } else {
-        break;
-      }
+      axios.get(
+        `/cookie-based/validate`
+      ).then(function(response) {
+        if (response.data.uuid === userUUID) {
+          endTime = new Date();
+          timeInterval.push(endTime - startTime);
+          console.log(i + ': ' + (endTime - startTime));
+        }
+      });
     }
     console.log(timeInterval);
-  };
-
-  const HeaderValidate = async () => {
-    const userToken = call(api.getTokenFromLocalStorage);
-    return call(api.validateTokenByHeader, userToken, userUUID);
-  };
-
-  const CookieValidate = async () => {
-    return call(api.validateTokenByCookie, userUUID);
   };
 
   const setToken_Header = async () => {

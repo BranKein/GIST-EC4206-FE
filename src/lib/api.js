@@ -43,7 +43,3 @@ export const validateTokenByHeader = ( userToken, uuid ) => {
     });
   return result
 };
-
-export const getTokenFromLocalStorage = () => {
-  return localStorage.getItem("userToken");
-};
